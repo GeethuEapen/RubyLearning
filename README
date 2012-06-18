@@ -1,0 +1,18 @@
+string:
+  print a string
+  add two strings
+  add a intiger to a string
+
+array:
+  parse an array
+
+hash:
+  parse a hash
+
+if condition:
+
+file:
+  read a file
+  write to a file
+
+READ: http://www.ruby-doc.org/docs/ProgrammingRuby/
