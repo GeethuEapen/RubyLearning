@@ -1,3 +1,5 @@
+#code to perform insertion to a database
+
 require 'mysql'
 
 con=Mysql.new('localhost','root','aspirine','test')
