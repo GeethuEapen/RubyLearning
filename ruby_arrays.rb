@@ -1,3 +1,6 @@
+
+#code to filter even numbers from a list of numbers
+
 def EvenFilter(array)
  result = []
   array.each do|item|
