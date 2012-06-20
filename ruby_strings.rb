@@ -1,3 +1,5 @@
+#Code to perform string concatenation
+
 first = "Foo"
 second = "Bar"
 third = 22
