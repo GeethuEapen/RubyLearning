@@ -1,3 +1,4 @@
+#code to perform file operation
 
 f1 = File.open("/home/geethu/Downloads/trials.txt", "r") 
 list = []
