@@ -1,0 +1,119 @@
+  
+REDIS
+
+
+    Redis is an open source, advanced key-value store. It is often referred to as a data structure server since
+ keys can contain strings, hashes, lists, sets and sorted sets.
+
+    You can run atomic operations on these types, like appending to a string; incrementing the value in a hash; pushing to a list; 
+computing set intersection, union and difference; or getting the member with highest ranking in a sorted set.
+
+    In order to achieve its outstanding performance, Redis works with an in-memory dataset. Depending on your use case, 
+you can persist it either by dumping the dataset to disk every once in a while, or by appending each command to a log.
+
+
+
+
+GET and SET
+
+Redis is a key-value store. By issuing the command SET foo bar you set the value of foo to bar.
+
+For example, issue the following command from the redis-cli you just started.
+
+redis> set foo bar
+OK
+
+Now read the value of foo with the GET command.
+
+redis> get foo
+"bar"
+
+
+
+EXPIRE and TTL
+
+You can set keys to expire in a given amount of time by using the command, EXPIRE. TTL reports the time remaining before the key expires.
+
+redis> set foo bar
+OK
+redis> expire foo 120
+(integer) 1
+redis> ttl foo
+(integer) 113
+
+
+
+
+Lists
+
+One of the distinguishing features of Redis is that the values of a key can be data-structures, rather than just values.
+
+The following commands pertain to lists: RPUSH, LPUSH, LLEN, LRANGE, LTRIM, LINDEX, LSET, LREM, LPOP, RPOP, BLPOP, BRPOP, RPOPLPUSH, and SORT.
+
+To create a list use LPUSH or RPUSH. If a list already exists, LPUSH will add the given value to the beginning of the list and RPUSH will add it to the end.
+
+redis> lpush cities "San Francisco"
+(integer) 1
+redis> lpush cities "Boston"
+(integer) 2
+redis> lrange cities 0 -1
+1. "San Francisco"
+2. "Boston"
+redis> sort cities alpha
+1. "Boston"
+2. "San Francisco"
+redis> rpop cities
+"San Francisco"
+redis> lrange cities 0 -1
+1. "Boston"
+
+
+
+Sets
+
+Sets are similar to lists, except each element can occur only once. The following commands pertain specifically to sets: SADD, SREM, SPOP, SMOVE, SCARD, SISMEMBER, SINTER, SINTERSTORE, SUNION, SUNIONSTORE, SDIFF, SDIFFSTORE, SMEMBERS, SRANDMEMBER.
+
+redis> sadd states "Vermont"
+(integer) 1
+redis> smembers states
+1. "Vermont"
+redis> sadd states "Texas"
+(integer) 1
+redis> scard states
+(integer) 2
+redis> sadd states "Vermont"
+(integer) 0
+redis> smembers states
+1. "Vermont"
+2. "Texas"
+redis> sadd states "California"
+(integer) 1
+redis> smembers states
+1. "Vermont"
+2. "Texas"
+3. "California"
+redis> srem states "California"
+(integer) 1
+redis> smembers states
+1. "Vermont"
+2. "Texas"
+
+
+Hashs
+
+Using a hash, you can assign values to fields in each key.The following commands operate on sets: HSET, HGET, HSETNX, HMSET, HMGET, HINCRBY, HEXISTS, HDEL, HLEN, HKEYS, HVALS, HGETALL.
+
+redis> hset user name "John Doe"
+(integer) 1
+redis> hget user name
+"John Doe"
+redis> hset user address "1234 Lombard Street"
+(integer) 1
+redis> hget user address
+"1234 Lombard Street"
+redis> hgetall user
+1. "name"
+2. "John Doe"
+3. "address"
+4. "1234 Lombard Street"
+
