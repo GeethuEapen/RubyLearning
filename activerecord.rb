@@ -15,8 +15,8 @@ class Base1 < ActiveRecord::Base
 end
 
 def load_data row
-    Base1.create ( :msisdn => "#{row[0].strip}", :ftt => "#{row[1].strip}", :combo => "#{row[2].strip}", :std => "#{row[3].strip}", :isd => "#{row[4].strip}", :gprs => "#{row[5].strip}", 
-                   :vas => "#{row[6].strip}" )  
+    Base1.create ( {:msisdn => row[0].strip, :ftt => row[1].strip, :combo => row[2].strip, :std => row[3].strip, :isd => row[4].strip, :gprs => row[5].strip, 
+                   :vas => row[6].strip} )  
 end
 
 def get_data 
