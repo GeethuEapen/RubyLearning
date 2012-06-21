@@ -1,0 +1,5 @@
+db_sesstings:
+    host: "localhost"
+    user: "root"
+    password: "aspirine"
+    db: "test"
