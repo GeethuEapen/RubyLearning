@@ -10,7 +10,7 @@ def mysql_connection mode = nil
 end
 
 def load_data con, row
-    con.query("INSERT INTO table2(msisdn,ftt) VALUES ('#{row[0].strip}','#{row[1].strip}')")
+    con.query("INSERT INTO base(msisdn,ftt,combo,std,isd,gprs,vas) VALUES ('#{row[0].strip}','#{row[1].strip}','#{row[2].strip}','#{row[3].strip}','#{row[4].strip}','#{row[5].strip}','#{row[6].strip}')")
 end
 
 def get_data con
