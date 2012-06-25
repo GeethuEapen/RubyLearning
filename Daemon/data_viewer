@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+equire 'rubygems'
+require 'redis'
+require 'json'
+
+$redis = Redis.new
+
+def data_viewer
+  p JSON.parse($redis.get("DaemonTest"))
+end
+
+data_viewer  

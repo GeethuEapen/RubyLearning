@@ -7,7 +7,7 @@ ActiveRecord::Base.establish_connection(
 :user => "root",
 :password => "aspirine",  
 :database => "Report"  
-)  
+)
  
 
 class Msisdn < ActiveRecord::Base
@@ -20,32 +20,35 @@ end
 
 class ReportGenerator 
 
-  def get_data item
-    a = Ftt.all( :conditions => { :msisdn => item})
+  def get_data msisdn
+    Ftt.first( :conditions => { :msisdn => msisdn})
   end
 
  
-  def msisdn
-    list1 = []
-    msisdn = Msisdn.find(:all, :select => "msisdn").map(&:msisdn)
-    msisdn.each do|item|
-      a = get_data(item)
-      list1 << a            
+  def msisdns
+    list = []
+    msisdns = Msisdn.find(:all, :select => "msisdn").map(&:msisdn)
+    msisdns.each do|msisdn|
+      list <<  get_data(msisdn)            
     end
-    list1
+    list
   end
 
  
-  def write_data
+  def write_data data
     CSV.open("data.csv","w") do |csv|
-      msisdn.each do |row|
+      data.each do |row| 
         csv << row.split(",") 
       end
     end
   end
 
+  def retailers
+  end
+
 end
 
 obj = ReportGenerator.new
-obj.write_data
+
+obj.write_deata(obj.msisdns)
 
