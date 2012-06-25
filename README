@@ -1,18 +1,178 @@
-string:
-  print a string
-  add two strings
-  add a intiger to a string
 
-array:
-  parse an array
 
-hash:
-  parse a hash
 
-if condition:
+-----------------------------------------Files
+Opening and Closing Files:
 
-file:
-  read a file
-  write to a file
+The File.new Method:
 
-READ: http://www.ruby-doc.org/docs/ProgrammingRuby/
+You can create a File object using File.new method for reading, writing, or both, according to the mode string. Finally you can use File.close method to close that file.
+Syntax:
+
+aFile = File.new("filename", "mode")
+   # ... process the file
+aFile.close
+
+The File.open Method:
+
+You can use File.open method to create a new file object and assign that file object to a file. However, there is one difference in between File.open and File.new methods. The difference is that the File.open method can be associated with a block, whereas you cannot do the same using the File.new method.
+
+File.open("filename", "mode") do |aFile|
+   # ... process the file
+end
+
+
+
+-----------------------------------------mysql
+The mysql2 module is a Ruby interface to the MySQL server. It provides the same functions for Ruby programs that the MySQL C API provides for C programs.
+
+$ mysql -u root -p
+
+eg:
+require 'mysql'
+
+#my = Mysql.new(hostname, username, password, databasename)
+con = Mysql.new('localhost', '', '', 'student')
+rs = con.query('select * from student')
+rs.each_hash { |h| puts h['name']}
+con.close
+
+eg:
+def mysql_connection mode = nil
+  (mode.nil?) ? (Mysql.new(@settings["db_sesstings"]["host"], @settings["db_sesstings"]["user"], @settings["db_sesstings"]["password"], @settings["db_sesstings"]["db"])) : (mode.close)
+end
+
+
+
+def run
+  @settings = settings
+  con = mysql_connection
+  get_data con
+  mysql_connection con
+end
+
+           //while using yaml
+
+
+
+---------------------------------------yaml
+YAML is a human-readable data serialization format that takes concepts from programming languages such as C, Perl, and Python... YAML was first proposed by Clark Evans in 2001,[1] who designed it together with Ingy döt Net[2] and Oren Ben-Kiki.[2] It is available for several programming languages.
+
+eg:
+def settings
+  YAML.load(File.open('test.yaml'))
+end
+
+
+// test.yaml
+db_settings:
+    host: "localhost"
+    user: "root"
+    password: "aspirine"
+    db: "Report"
+
+
+
+-------------------------------------arrays
+
+eg:
+def EvenFilter(array)
+ result = []
+  array.each do|item|
+       result << item if item % 2 == 0
+    end
+ result
+end
+
+
+
+
+----------------------------------------redis
+  
+    Redis is an open source, advanced key-value store. It is often referred to as a data structure server since
+ keys can contain strings, hashes, lists, sets and sorted sets.
+
+redis> set foo bar
+OK
+redis> get foo
+"bar"
+redis> expire foo 120
+(integer) 1
+redis> ttl foo
+(integer) 113
+                     lists,sets,hash...
+
+
+
+-------------------------------------active records
+
+ - Active record is an approach to accessing data in a database. A database table or view is wrapped into a class.
+ - Thus, an object instance is tied to a single row in the table. After creation of an object, a new row is added to the table upon save.
+
+eg:
+ActiveRecord::Base.establish_connection(
+:adapter => "mysql",
+:host => "localhost",
+:user => "root",
+:password => "aspirine",
+:database => "test"
+)
+ 
+
+class Base1 < ActiveRecord::Base
+    self.table_name = "base"
+ end
+
+
+def load_data row
+    Base1.create ( {:msisdn => row[0].strip, :ftt => row[1].strip, :combo => row[2].strip, :std => row[3].strip, :isd => row[4].strip, :gprs => row[5].strip,
+                   :vas => row[6].strip} )
+end
+
+
+
+
+-------------------------------------csv files
+A CSV file is a specially formatted plain text file which stores spreadsheet or basic database-style information in a very simple format, with one record on each line, and each field within that record separated by a comma
+
+eg
+def write_data data
+    CSV.open("data.csv","w") do |csv|
+      data.each do |row|
+        csv << row.split(",")
+      end
+
+
+
+
+-------------------------------------Daemon
+Daemons provides an easy way to wrap existing ruby scripts (for example a self-written server) to be run as a daemon and to be controlled by simple start/stop/restart commands.
+If you want, you can also use daemons to run blocks of ruby code in a daemon process and to control these processes from the main application.
+Besides this basic functionality, daemons offers many advanced features like exception backtracing and logging (in case your ruby script crashes) and monitoring and automatic restarting of your processes if they crash.
+
+eg
+#### this is myserver_control.rb
+
+require 'rubygems'        # if you use RubyGems
+require 'daemons'
+
+Daemons.run('myserver.rb')
+
+#### this is myserver.rb
+# it does nothing really useful at the moment
+
+loop do
+  sleep(5)
+end
+
+
+#### this is myproc_control.rb
+
+require 'rubygems'        # if you use RubyGems
+require 'daemons'
+
+Daemons.run_proc('myproc.rb') do
+  loop do
+    sleep(5)
+  end
+end
