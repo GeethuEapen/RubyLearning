@@ -32,6 +32,7 @@ class ReportGenerator
       list <<  get_data(msisdn)            
     end
     list
+    p "hi"
   end
 
  
