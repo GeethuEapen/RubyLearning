@@ -1,0 +1,320 @@
+------------------------------------------Simple Sequence
+
+You can specify a list in YAML by placing each member of the list on a new line with an opening dash. These lists are called sequences.
+
+Yaml
+
+- apple 
+- banana 
+- carrot 
+
+Ruby
+
+['apple', 'banana', 'carrot']  
+
+--------------------------------------------Nested Sequences
+
+You can include a sequence within another sequence by giving the sequence an empty dash, followed by an indented list.
+
+Yaml
+
+- 
+ - foo 
+ - bar 
+ - baz 
+
+Ruby
+
+[['foo', 'bar', 'baz']] 
+
+
+--------------------------------------------Simple Mapping
+
+You can add a keyed list (also known as a dictionary or hash) to your document by placing each member of the list on a new line, with a colon seperating the key from its value. In YAML, this type of list is called a mapping.
+
+Yaml
+
+foo: whatever 
+bar: stuff 
+
+Ruby
+
+{ 'foo' => 'whatever', 'bar' => 'stuff' } 
+
+--------------------------------------------Mixed Mapping
+
+A mapping can contain any assortment of mappings and sequences as values.
+
+Yaml
+
+foo: whatever 
+bar: 
+ - 
+   fruit: apple 
+   name: steve 
+   sport: baseball 
+ - more 
+ - 
+   python: rocks 
+   perl: papers 
+   ruby: scissorses 
+
+Ruby
+
+{ 'foo' => 'whatever',  
+  'bar' => [ 
+    { 
+        'fruit' => 'apple',  
+        'name' => 'steve', 
+        'sport' => 'baseball' 
+    }, 
+    'more', 
+    { 
+        'python' => 'rocks', 
+        'perl' => 'papers', 
+        'ruby' => 'scissorses' 
+    } 
+  ] 
+} 
+
+-------------------------------------------------Merge key
+
+A merge key ('<<') can be used in a mapping to insert other mappings. If the value associated with the merge key is a mapping, each of its key/value pairs is inserted into the current mapping.
+
+Yaml
+
+mapping:
+  name: Joe
+  job: Accountant
+  <<:
+    age: 38
+
+Ruby
+
+{ 'mapping' =>
+  { 'name' => 'Joe',
+    'job' => 'Accountant',
+    'age' => 38
+  }
+}
+
+-----------------------------------------Simple Inline Array
+
+Sequences can be contained on a single line, using the inline syntax. Separate each entry with commas and enclose in square brackets.
+
+Yaml
+
+---  
+seq: [ a, b, c ] 
+
+Ruby
+
+{ 'seq' => [ 'a', 'b', 'c' ] } 
+
+-------------------------------------------String characters
+
+A string can contain any alphabetic or numeric character, along with many punctuation characters, including the period, dash, space, quotes, exclamation, and question mark.
+
+Yaml
+
+- What's Yaml? 
+- It's for writing data structures in plain text. 
+- And? 
+- And what? That's not good enough for you? 
+- No, I mean, "And what about Yaml?" 
+- Oh, oh yeah. Uh.. Yaml for Ruby. 
+
+Ruby
+
+[ 
+  "What's Yaml?", 
+  "It's for writing data structures in plain text.", 
+  "And?", 
+  "And what? That's not good enough for you?", 
+  "No, I mean, \"And what about Yaml?\"", 
+  "Oh, oh yeah. Uh.. Yaml for Ruby." 
+] 
+-------------------------------------------Indicators in Strings
+
+Be careful using indicators in strings. In particular, the comma, colon, and pound sign must be used carefully.
+
+Yaml
+
+the colon followed by space is an indicator: but is a string:right here 
+same for the pound sign: here we have it#in a string 
+the comma can, honestly, be used in most cases: [ but not in, inline collections ] 
+
+Ruby
+
+{ 
+  'the colon followed by space is an indicator' => 'but is a string:right here', 
+  'same for the pound sign' => 'here we have it#in a string', 
+  'the comma can, honestly, be used in most cases' => [ 'but not in', 'inline collections' ] 
+} 
+
+
+
+------------------------------------------Forcing Strings
+
+Any YAML type can be forced into a string using the explicit !str method.
+
+Yaml
+
+date string: !str 2001-08-01 
+number string: !str 192 
+
+Ruby
+
+{ 
+  'date string' => '2001-08-01', 
+  'number string' => '192' 
+} 
+
+
+-----------------------------------------Null
+
+You can use the tilde '~' character for a null value.
+
+Yaml
+
+name: Mr. Show 
+hosted by: Bob and David 
+date of next season: ~ 
+
+Ruby
+
+{ 
+  'name' => 'Mr. Show', 
+  'hosted by' => 'Bob and David', 
+  'date of next season' => nil 
+} 
+----------------------------------------Time
+
+You can represent timestamps by using ISO8601 format, or a variation which allows spaces between the date, time and time zone.
+
+Yaml
+
+iso8601: 2001-12-14t21:59:43.10-05:00 
+space seperated: 2001-12-14 21:59:43.10 -05:00 
+
+Ruby
+
+{ 
+  'iso8601' => YAML::mktime( 2001, 12, 14, 21, 59, 43, 0.10, "-05:00" ), 
+  'space seperated' => YAML::mktime( 2001, 12, 14, 21, 59, 43, 0.10, "-05:00" ) 
+} 
+--------------------------------Date
+
+A date can be represented by its year, month and day in ISO8601 order.
+
+Yaml
+
+--- 1976-07-31
+
+Ruby
+
+Date.new( 1976, 7, 31 ) 
+---------------------------------Three trailing newlines in literals
+
+To give you more control over how space is preserved in text blocks, YAML has the keep '+' and chomp '-' indicators. The keep indicator will preserve all ending newlines, while the chomp indicator will strip all ending newlines.
+
+Yaml
+
+clipped: |
+    This has one newline.
+
+stripped: |-
+    This has no newline.
+
+kept: |+
+    This has four newlines.
+
+
+Ruby
+{  
+  'clipped' => "This has one newline.\n", 
+  'same as "clipped" above' => "This has one newline.\n", 
+  'stripped' => 'This has no newline.', 
+  'same as "stripped" above' => 'This has no newline.', 
+  'kept' => "This has four newlines.\n\n\n\n", 
+  'same as "kept" above' => "This has four newlines.\n\n\n\n" 
+} 
+-----------------------------------Three trailing newlines in folded block
+
+The keep and chomp indicators can also be applied to folded blocks.
+
+Yaml
+
+clipped: >
+    This has one newline.
+
+stripped: >-
+    This has no newline.
+
+kept: >+
+    This has four newlines.
+
+Ruby
+{  
+  'clipped' => "This has one newline.\n", 
+  'same as "clipped" above' => "This has one newline.\n", 
+  'stripped' => 'This has no newline.', 
+  'same as "stripped" above' => 'This has no newline.', 
+  'kept' => "This has four newlines.\n\n\n\n", 
+  'same as "kept" above' => "This has four newlines.\n\n\n\n" 
+} 
+-----------------------------------------Simple Alias Example
+
+If you need to refer to the same item of data twice, you can give that item an alias. The alias is a plain string, starting with an ampersand. The item may then be referred to by the alias throughout your document by using an asterisk before the name of the alias. This is called an anchor.
+
+Yaml
+
+- &showell Steve 
+- Clark 
+- Brian 
+- Oren 
+- *showell 
+
+Ruby
+
+showell = 'Steve' 
+
+[ showell, 'Clark', 'Brian', 'Oren', showell ] 
+
+------------------------------------------------Alias of a Mapping
+
+An alias can be used on any item of data, including sequences, mappings, and other complex data types.
+
+Yaml
+
+- &hello 
+    Meat: pork 
+    Starch: potato 
+- banana 
+- *hello 
+
+Ruby
+
+hello = { 'Meat' => 'pork', 'Starch' => 'potato' } 
+
+[  
+  hello,  
+  'banana', 
+  hello 
+] 
+--------------------------------------------YAML Header
+
+The opening separator can contain directives to the YAML parser, such as the version number.
+
+Yaml
+
+--- %YAML:1.0 
+foo: 1 
+bar: 2 
+
+Ruby
+
+y = Stream.new 
+y.add( { 'foo' => 1, 'bar' => 2 } ) 
+
+
