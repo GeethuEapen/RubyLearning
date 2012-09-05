@@ -1,0 +1,63 @@
+common code part for reports
+**************
+
+require 'optparse'
+
+options = {}
+option_parser = OptionParser.new do |opts|
+  executable_name = File.basename($PROGRAM_NAME)
+  opts.banner= <<-EOS
+Generate Vodafone Kerala 130-131-132 MIS Report
+
+Usage: #{executable_name} [options] report_date(YYYY-MM-DD)
+  EOS
+
+  opts.on("-e environment",
+          "Environment to run the report in (production or development)") do |env|
+    unless ['production', 'development'].include?(env)
+      raise ArgumentError,"Environment must either be production or development"
+    end
+    options[:env] = env
+  end
+end
+
+begin
+  option_parser.parse!
+rescue OptionParser::InvalidArgument => ex
+  STDERR.puts ex.message
+  STDERR.puts option_parser
+  exit 1
+end
+
+environment = options[:env] || "production"
+environment_settings_path = "settings/environment.yaml"
+unless File.exists?(environment_settings_path)
+  STDERR.puts "Report was not generated as settings/environment.yaml file was not found"
+  exit 1
+end
+
+begin 
+  settings = YAML.load_file("settings/environment.yaml")
+  env_settings = settings[environment].to_options
+rescue Exception => ex
+  STDERR.puts ex.message
+  exit 1
+end
+
+@mys = Mysql2::Client.new(env_settings)
+
+begin
+  @report_date = ARGV[0].blank? ? (Date.today - 1) : Date.parse(ARGV[0].strip)
+rescue Exception => e
+  STDERR.puts e.message  
+  STDERR.puts "Report date should be in the format: YYYY-MM-DD"
+  exit 1
+end
+
+
+
+run as
+**********
+./ussd-consolidated-balance-transfer-130-131-132 -e development/production
+
+give required settings in settings/environment.yaml

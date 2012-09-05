@@ -1,5 +1,0 @@
-db_settings:
-    host: "localhost"
-    user: "root"
-    password: "aspirine"
-    db: "test"
